@@ -8,7 +8,6 @@ import {
   SpeechIcon,
   User,
 } from "lucide-react"
-import { ThemeToggle } from "@/components/ThemeToggle"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,11 +32,15 @@ export function Navbar({ user }: { user: { name: string; imageUrl: string } }) {
   const pathName = usePathname()
 
   return (
-    <nav className="h-header border-b">
+    <nav className="h-header border-b border-white/10 bg-slate-950/80 backdrop-blur-lg">
       <div className="container flex h-full items-center justify-between">
-        <Link href="/app" className="flex items-center gap-2">
-          <BrainCircuitIcon className="size-8 text-primary" />
-          <span className="text-xl font-bold">Landr</span>
+        <Link href="/app" className="flex items-center gap-3 text-white">
+          <div className="rounded-full bg-emerald-500/10 p-2 ring-1 ring-emerald-500/30">
+            <BrainCircuitIcon className="size-6 text-emerald-300" />
+          </div>
+          <span className="text-lg font-semibold tracking-tight">
+            Excel Interview
+          </span>
         </Link>
 
         <div className="flex items-center gap-4">
@@ -50,7 +53,7 @@ export function Navbar({ user }: { user: { name: string; imageUrl: string } }) {
                   variant={pathName === hrefPath ? "secondary" : "ghost"}
                   key={name}
                   asChild
-                  className="cursor-pointer max-sm:hidden"
+                  className="cursor-pointer max-sm:hidden border-white/10 text-white"
                 >
                   <Link href={hrefPath}>
                     <Icon />
@@ -59,8 +62,6 @@ export function Navbar({ user }: { user: { name: string; imageUrl: string } }) {
                 </Button>
               )
             })}
-
-          <ThemeToggle />
 
           <DropdownMenu>
             <DropdownMenuTrigger>

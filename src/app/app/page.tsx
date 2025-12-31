@@ -44,58 +44,77 @@ async function JobInfos() {
   }
 
   return (
-    <div className="container my-4">
-      <div className="flex gap-2 justify-between mb-6">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl">
-          Select a job description
-        </h1>
-        <Button asChild>
-          <Link href="/app/job-infos/new">
-            <PlusIcon />
-            Create Job Description
-          </Link>
-        </Button>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 has-hover:*:not-hover:opacity-70">
-        {jobInfos.map(jobInfo => (
-          <Link
-            className="hover:scale-[1.02] transition-[transform_opacity]"
-            href={`/app/job-infos/${jobInfo.id}`}
-            key={jobInfo.id}
-          >
-            <Card className="h-full">
-              <div className="flex items-center justify-between h-full">
-                <div className="space-y-4 h-full">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{jobInfo.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground line-clamp-3">
-                    {jobInfo.description}
+    <div className="min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative w-full max-w-screen-2xl mx-auto px-6 lg:px-12 py-10 space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/80">
+              Your roles
+            </p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+              Select a role to continue practicing
+            </h1>
+            <p className="text-slate-200/80 max-w-2xl">
+              Keep everything aligned: description, interview drills, resume,
+              and questions for each target role.
+            </p>
+          </div>
+          <Button asChild size="lg" className="gap-2">
+            <Link href="/app/job-infos/new">
+              <PlusIcon />
+              Create role
+            </Link>
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 has-hover:*:not-hover:opacity-70">
+          {jobInfos.map(jobInfo => (
+            <Link
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-1 transition duration-300 hover:border-white/20 hover:bg-white/10"
+              href={`/app/job-infos/${jobInfo.id}`}
+              key={jobInfo.id}
+            >
+              <Card className="h-full border-0 bg-transparent shadow-none">
+                <div className="flex items-center justify-between gap-4 p-4">
+                  <div className="space-y-3">
+                    <CardHeader className="p-0">
+                      <CardTitle className="text-xl">{jobInfo.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0 text-slate-200/80 line-clamp-3">
+                      {jobInfo.description}
+                    </CardContent>
+                    <CardFooter className="p-0 flex gap-2 text-sm">
+                      <Badge variant="outline" className="border-white/30 text-white">
+                        {formatExperienceLevel(jobInfo.experienceLevel)}
+                      </Badge>
+                      {jobInfo.title && (
+                        <Badge variant="outline" className="border-white/30 text-white">
+                          {jobInfo.title}
+                        </Badge>
+                      )}
+                    </CardFooter>
+                  </div>
+                  <CardContent className="p-0">
+                    <ArrowRightIcon className="size-6 text-emerald-200" />
                   </CardContent>
-                  <CardFooter className="flex gap-2">
-                    <Badge variant="outline">
-                      {formatExperienceLevel(jobInfo.experienceLevel)}
-                    </Badge>
-                    {jobInfo.title && (
-                      <Badge variant="outline">{jobInfo.title}</Badge>
-                    )}
-                  </CardFooter>
                 </div>
-                <CardContent>
-                  <ArrowRightIcon className="size-6" />
-                </CardContent>
+              </Card>
+            </Link>
+          ))}
+
+          <Link
+            className="group rounded-2xl border border-dashed border-white/15 bg-white/5 transition duration-300 hover:border-emerald-400/50"
+            href="/app/job-infos/new"
+          >
+            <Card className="h-full border-0 bg-transparent shadow-none flex items-center justify-center">
+              <div className="text-lg flex items-center gap-2 text-slate-100">
+                <PlusIcon className="size-6 text-emerald-300" />
+                Add another role
               </div>
             </Card>
           </Link>
-        ))}
-        <Link className="transition-opacity" href="/app/job-infos/new">
-          <Card className="h-full flex items-center justify-center border-dashed border-3 bg-transparent hover:border-primary/50 transition-colors shadow-none">
-            <div className="text-lg flex items-center gap-2">
-              <PlusIcon className="size-6" />
-              New Job Description
-            </div>
-          </Card>
-        </Link>
+        </div>
       </div>
     </div>
   )
@@ -103,22 +122,28 @@ async function JobInfos() {
 
 function NoJobInfos() {
   return (
-    <div className="container my-4 max-w-5xl">
-      <h1 className="text-3xl md:text-4xl lg:text-5xl mb-4">
-        Welcome to Landr
-      </h1>
-      <p className="text-muted-foreground mb-8">
-        To get started, enter information about the type of job you are wanting
-        to apply for. This can be specific information copied directly from a
-        job listing or general information such as the tech stack you want to
-        work in. The more specific you are in the description the closer the
-        test interviews will be to the real thing.
-      </p>
-      <Card>
-        <CardContent>
-          <JobInfoForm />
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative w-full max-w-screen-lg mx-auto px-6 lg:px-12 py-12 space-y-6">
+        <div className="space-y-3">
+          <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/80">
+            Start here
+          </p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+            Set up your first target role
+          </h1>
+          <p className="text-slate-200/80">
+            Drop in the role description you’re chasing-stack, scope, and
+            expectations. We’ll align interview drills, resume rewrites, and
+            questions to this target.
+          </p>
+        </div>
+        <Card className="border-white/10 bg-white/5">
+          <CardContent className="p-6">
+            <JobInfoForm />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -64,65 +64,74 @@ export default async function JobInfoPage({
   )
 
   return (
-    <div className="container my-4 space-y-4">
-      <BackLink href="/app">Dashboard</BackLink>
+    <div className="relative min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative container py-8 space-y-6">
+        <BackLink href="/app">Dashboard</BackLink>
 
-      <div className="space-y-6">
-        <header className="space-y-4">
-          <div className="space-y-2">
-            <h1 className="text-3xl md:text-4xl">
-              <SuspendedItem
-                item={jobInfo}
-                fallback={<Skeleton className="w-48" />}
-                result={j => j.name}
-              />
-            </h1>
-            <div className="flex gap-2">
-              <SuspendedItem
-                item={jobInfo}
-                fallback={<Skeleton className="w-12" />}
-                result={j => (
-                  <Badge variant="secondary">
-                    {formatExperienceLevel(j.experienceLevel)}
-                  </Badge>
-                )}
-              />
-              <SuspendedItem
-                item={jobInfo}
-                fallback={null}
-                result={j => {
-                  return j.title && <Badge variant="secondary">{j.title}</Badge>
-                }}
-              />
+        <div className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-emerald-500/10">
+          <header className="space-y-4">
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-semibold">
+                <SuspendedItem
+                  item={jobInfo}
+                  fallback={<Skeleton className="w-48" />}
+                  result={j => j.name}
+                />
+              </h1>
+              <div className="flex gap-2">
+                <SuspendedItem
+                  item={jobInfo}
+                  fallback={<Skeleton className="w-12" />}
+                  result={j => (
+                    <Badge variant="secondary">
+                      {formatExperienceLevel(j.experienceLevel)}
+                    </Badge>
+                  )}
+                />
+                <SuspendedItem
+                  item={jobInfo}
+                  fallback={null}
+                  result={j => {
+                    return j.title && <Badge variant="secondary">{j.title}</Badge>
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          <p className="text-muted-foreground line-clamp-3">
-            <SuspendedItem
-              item={jobInfo}
-              fallback={<Skeleton className="w-96" />}
-              result={j => j.description}
-            />
-          </p>
-        </header>
+            <p className="text-slate-200/80 line-clamp-3">
+              <SuspendedItem
+                item={jobInfo}
+                fallback={<Skeleton className="w-96" />}
+                result={j => j.description}
+              />
+            </p>
+          </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 has-hover:*:not-hover:opacity-70">
-          {options.map(option => (
-            <Link
-              className="hover:scale-[1.02] transition-[transform_opacity]"
-              href={`/app/job-infos/${jobInfoId}/${option.href}`}
-              key={option.href}
-            >
-              <Card className="h-full flex items-start justify-between flex-row">
-                <CardHeader className="flex-grow">
-                  <CardTitle>{option.label}</CardTitle>
-                  <CardDescription>{option.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ArrowRightIcon className="size-6" />
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 has-hover:*:not-hover:opacity-70">
+            {options.map(option => (
+              <Link
+                className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 transition duration-300 hover:border-white/20 hover:bg-white/10"
+                href={`/app/job-infos/${jobInfoId}/${option.href}`}
+                key={option.href}
+              >
+                <Card className="h-full border-0 bg-transparent shadow-none">
+                  <div className="flex items-start justify-between gap-4 p-4">
+                    <CardHeader className="p-0 flex-grow">
+                      <CardTitle className="text-lg text-white">
+                        {option.label}
+                      </CardTitle>
+                      <CardDescription className="text-slate-200/80">
+                        {option.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <ArrowRightIcon className="size-6 text-emerald-200 transition group-hover:translate-x-1" />
+                    </CardContent>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -81,25 +81,81 @@ export function ResumePageClient({ jobInfoId }: { jobInfoId: string }) {
 
   return (
     <div className="space-y-8 w-full">
-      <Card>
-        <CardHeader>
-          <CardTitle>
+      <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr] items-stretch">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-xl space-y-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-emerald-200/80">
+            Resume lab
+          </p>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-3xl md:text-4xl font-semibold leading-tight">
+              Upload and get tailored, job-aware resume feedback
+            </h1>
+            <p className="text-slate-200/80 max-w-2xl">
+              We score your resume across ATS readiness, job match, and writing
+              clarity—then give concrete edits you can make immediately.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 text-sm text-slate-200/80">
+            <div className="flex items-start gap-3">
+              <span className="mt-1 text-emerald-300">✓</span>
+              <span>PDF, Doc, or text up to 10MB</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-1 text-emerald-300">✓</span>
+              <span>Highlights top fixes recruiters look for</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-1 text-emerald-300">✓</span>
+              <span>Keywords matched to your target role</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-1 text-emerald-300">✓</span>
+              <span>No data is shared outside your workspace</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
+          {[
+            { label: "Avg. score lift", value: "+23%" },
+            { label: "ATS checks", value: "35+" },
+            { label: "Keyword gaps fixed", value: "11" },
+            { label: "Minutes to results", value: "<2" },
+          ].map(item => (
+            <div
+              key={item.label}
+              className="rounded-xl border border-white/10 bg-emerald-500/10 p-4 shadow-lg"
+            >
+              <p className="text-xs uppercase tracking-wide text-emerald-100/80">
+                {item.label}
+              </p>
+              <p className="text-2xl font-semibold text-white mt-1">
+                {item.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Card className="bg-white/5 border-white/10 shadow-2xl backdrop-blur-xl">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl">
             {isLoading ? "Analyzing your resume" : "Upload your resume"}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-slate-200/80">
             {isLoading
-              ? "This may take a couple minutes"
-              : "Get personalized feedback on your resume based on the job"}
+              ? "This may take a couple minutes."
+              : "Drop your resume to get line-by-line, job-aware feedback."}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <LoadingSwap loadingIconClassName="size-16" isLoading={isLoading}>
             <div
               className={cn(
-                "mt-2 border-2 border-dashed rounded-lg p-6 transition-colors relative",
+                "mt-2 relative rounded-2xl p-8 transition-all border-2 border-dashed",
                 isDragOver
-                  ? "border-primary bg-primary/5"
-                  : "border-muted-foreground/50 bg-muted/10"
+                  ? "border-emerald-300/70 bg-emerald-500/10 shadow-emerald-500/30 shadow-lg"
+                  : "border-white/20 bg-slate-900/60 hover:border-emerald-200/50 hover:bg-slate-900/80"
               )}
               onDragOver={e => {
                 e.preventDefault()
@@ -128,14 +184,27 @@ export function ResumePageClient({ jobInfoId }: { jobInfoId: string }) {
                 }}
               />
               <div className="flex flex-col items-center justify-center text-center gap-4">
-                <UploadIcon className="size-12 text-muted-foreground" />
+                <div className="rounded-full border border-emerald-200/40 bg-emerald-500/10 p-3">
+                  <UploadIcon className="size-10 text-emerald-200" />
+                </div>
                 <div className="space-y-2">
-                  <p className="text-lg">
+                  <p className="text-xl font-semibold text-white">
                     Drag your resume here or click to upload
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Supported formats: PDF, Word docs, and text files
+                  <p className="text-sm text-slate-200/80">
+                    Supported: PDF, Word docs, and text files (max 10MB)
                   </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-200/70">
+                  <span className="rounded-full border border-white/15 px-3 py-1">
+                    Tailored to your job profile
+                  </span>
+                  <span className="rounded-full border border-white/15 px-3 py-1">
+                    ATS friendliness check
+                  </span>
+                  <span className="rounded-full border border-white/15 px-3 py-1">
+                    Writing clarity suggestions
+                  </span>
                 </div>
               </div>
             </div>
@@ -168,7 +237,7 @@ function AnalysisResults({
   }
 
   return (
-    <Card>
+    <Card className="bg-white/5 border-white/10 backdrop-blur-xl shadow-xl">
       <CardHeader>
         <CardTitle>Analysis Results</CardTitle>
         <CardDescription>

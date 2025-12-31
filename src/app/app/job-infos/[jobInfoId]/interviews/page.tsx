@@ -28,14 +28,17 @@ export default async function InterviewsPage({
   const { jobInfoId } = await params
 
   return (
-    <div className="container py-4 gap-4 h-screen-header flex flex-col items-start">
-      <JobInfoBackLink jobInfoId={jobInfoId} />
+    <div className="relative min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative container py-8 gap-4 flex flex-col items-start">
+        <JobInfoBackLink jobInfoId={jobInfoId} />
 
-      <Suspense
-        fallback={<Loader2Icon className="size-24 animate-spin m-auto" />}
-      >
-        <SuspendedPage jobInfoId={jobInfoId} />
-      </Suspense>
+        <Suspense
+          fallback={<Loader2Icon className="size-24 animate-spin m-auto" />}
+        >
+          <SuspendedPage jobInfoId={jobInfoId} />
+        </Suspense>
+      </div>
     </div>
   )
 }
@@ -50,9 +53,11 @@ async function SuspendedPage({ jobInfoId }: { jobInfoId: string }) {
   }
   return (
     <div className="space-y-6 w-full">
-      <div className="flex gap-2 justify-between">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl">Interviews</h1>
-        <Button asChild>
+      <div className="flex gap-2 justify-between items-center">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+          Interviews
+        </h1>
+        <Button asChild className="gap-2">
           <Link href={`/app/job-infos/${jobInfoId}/interviews/new`}>
             <PlusIcon />
             New Interview
@@ -62,11 +67,11 @@ async function SuspendedPage({ jobInfoId }: { jobInfoId: string }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 has-hover:*:not-hover:opacity-70">
         <Link
-          className="transition-opacity"
+          className="transition-opacity group"
           href={`/app/job-infos/${jobInfoId}/interviews/new`}
         >
-          <Card className="h-full flex items-center justify-center border-dashed border-3 bg-transparent hover:border-primary/50 transition-colors shadow-none">
-            <div className="text-lg flex items-center gap-2">
+          <Card className="h-full flex items-center justify-center border-dashed border-white/25 bg-white/5 hover:border-emerald-300/60 transition-colors shadow-none">
+            <div className="text-lg flex items-center gap-2 text-emerald-200">
               <PlusIcon className="size-6" />
               New Interview
             </div>
@@ -78,16 +83,18 @@ async function SuspendedPage({ jobInfoId }: { jobInfoId: string }) {
             href={`/app/job-infos/${jobInfoId}/interviews/${interview.id}`}
             key={interview.id}
           >
-            <Card className="h-full">
-              <div className="flex items-center justify-between h-full">
-                <CardHeader className="gap-1 flex-grow">
-                  <CardTitle className="text-lg">
+            <Card className="h-full border-white/10 bg-white/5">
+              <div className="flex items-center justify-between h-full p-4">
+                <CardHeader className="gap-1 flex-grow p-0">
+                  <CardTitle className="text-lg text-white">
                     {formatDateTime(interview.createdAt)}
                   </CardTitle>
-                  <CardDescription>{interview.duration}</CardDescription>
+                  <CardDescription className="text-slate-200/80">
+                    {interview.duration}
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <ArrowRightIcon className="size-6" />
+                <CardContent className="p-0">
+                  <ArrowRightIcon className="size-6 text-emerald-200" />
                 </CardContent>
               </div>
             </Card>

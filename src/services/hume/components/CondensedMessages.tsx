@@ -22,30 +22,48 @@ export function CondensedMessages({
           <div
             key={index}
             className={cn(
-              "flex items-center gap-5 border pl-4 pr-6 py-4 rounded max-w-3/4",
-              message.isUser ? "self-end" : "self-start"
+              "relative max-w-[82%] rounded-2xl px-5 py-4 backdrop-blur-md border shadow-lg transition",
+              message.isUser
+                ? "self-end bg-emerald-500/10 border-emerald-300/30 text-emerald-50 shadow-emerald-500/20"
+                : "self-start bg-white/5 border-white/10 text-slate-100 shadow-sky-500/15"
             )}
           >
-            {message.isUser ? (
-              <UserAvatar user={user} className="size-6 flex-shrink-0" />
-            ) : (
-              <div className="relative">
-                <div
-                  className={cn(
-                    "absolute inset-0 border-muted border-4 rounded-full",
-                    shouldAnimate ? "animate-ping" : "hidden"
-                  )}
-                />
-                <BrainCircuitIcon
-                  className="size-6 flex-shrink-0 relative"
-                  style={shouldAnimate ? { scale: maxFft / 8 + 1 } : undefined}
-                />
+            <div
+              className={cn(
+                "absolute -top-3 text-[11px] tracking-wide uppercase px-3 py-1 rounded-full border",
+                message.isUser
+                  ? "border-emerald-200/50 bg-emerald-500/20 text-emerald-50"
+                  : "border-white/30 bg-white/10 text-slate-100"
+              )}
+            >
+              {message.isUser ? "You" : "Coach"}
+            </div>
+            <div className="flex items-start gap-4">
+              {message.isUser ? (
+                <UserAvatar user={user} className="size-10 flex-shrink-0" />
+              ) : (
+                <div className="relative">
+                  <div
+                    className={cn(
+                      "absolute inset-0 border-muted border-4 rounded-full",
+                      shouldAnimate ? "animate-ping" : "hidden"
+                    )}
+                  />
+                  <div className="relative flex items-center justify-center size-10 rounded-full bg-gradient-to-br from-sky-500/30 to-emerald-500/30 border border-white/20">
+                    <BrainCircuitIcon
+                      className="size-6 text-white"
+                      style={shouldAnimate ? { scale: maxFft / 8 + 1 } : undefined}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col gap-2 text-sm leading-relaxed">
+                {message.content.map((text, i) => (
+                  <p key={i} className="text-base">
+                    {text}
+                  </p>
+                ))}
               </div>
-            )}
-            <div className="flex flex-col gap-1">
-              {message.content.map((text, i) => (
-                <span key={i}>{text}</span>
-              ))}
             </div>
           </div>
         )

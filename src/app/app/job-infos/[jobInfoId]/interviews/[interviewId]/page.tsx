@@ -25,6 +25,7 @@ import { condenseChatMessages } from "@/services/hume/lib/condenseChatMessages"
 import { fetchChatMessages } from "@/services/hume/lib/api"
 import { ActionButton } from "@/components/ui/action-button"
 import { generateInterviewFeedback } from "@/features/interviews/actions"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default async function InterviewPage({
   params,
@@ -44,53 +45,59 @@ export default async function InterviewPage({
   )
 
   return (
-    <div className="container my-4 space-y-4">
-      <BackLink href={`/app/job-infos/${jobInfoId}/interviews`}>
-        All Interviews
-      </BackLink>
-      <div className="space-y-6">
-        <div className="flex gap-2 justify-between">
-          <div className="space-y-2 mb-6">
-            <h1 className="text-3xl md:text-4xl">
-              Interview:{" "}
+    <div className="relative min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative container py-8 space-y-6">
+        <BackLink href={`/app/job-infos/${jobInfoId}/interviews`}>
+          All Interviews
+        </BackLink>
+        <Card className="border-white/10 bg-white/5">
+          <CardContent className="p-6">
+            <div className="flex flex-wrap gap-4 items-center justify-between">
+              <div className="space-y-2">
+                <h1 className="text-2xl md:text-3xl font-semibold">
+                  Interview:{" "}
+                  <SuspendedItem
+                    item={interview}
+                    fallback={<Skeleton className="w-48" />}
+                    result={i => formatDateTime(i.createdAt)}
+                  />
+                </h1>
+                <p className="text-slate-200/80">
+                  <SuspendedItem
+                    item={interview}
+                    fallback={<Skeleton className="w-24" />}
+                    result={i => i.duration}
+                  />
+                </p>
+              </div>
               <SuspendedItem
                 item={interview}
-                fallback={<Skeleton className="w-48" />}
-                result={i => formatDateTime(i.createdAt)}
+                fallback={<SkeletonButton className="w-32" />}
+                result={i =>
+                  i.feedback == null ? (
+                    <ActionButton
+                      action={generateInterviewFeedback.bind(null, i.id)}
+                    >
+                      Generate Feedback
+                    </ActionButton>
+                  ) : (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button>View Feedback</Button>
+                      </DialogTrigger>
+                      <DialogContent className="md:max-w-3xl lg:max-w-4xl max-h-[calc(100%-2rem)] overflow-y-auto flex flex-col">
+                        <DialogTitle>Feedback</DialogTitle>
+                        <MarkdownRenderer>{i.feedback}</MarkdownRenderer>
+                      </DialogContent>
+                    </Dialog>
+                  )
+                }
               />
-            </h1>
-            <p className="text-muted-foreground">
-              <SuspendedItem
-                item={interview}
-                fallback={<Skeleton className="w-24" />}
-                result={i => i.duration}
-              />
-            </p>
-          </div>
-          <SuspendedItem
-            item={interview}
-            fallback={<SkeletonButton className="w-32" />}
-            result={i =>
-              i.feedback == null ? (
-                <ActionButton
-                  action={generateInterviewFeedback.bind(null, i.id)}
-                >
-                  Generate Feedback
-                </ActionButton>
-              ) : (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>View Feedback</Button>
-                  </DialogTrigger>
-                  <DialogContent className="md:max-w-3xl lg:max-w-4xl max-h-[calc(100%-2rem)] overflow-y-auto flex flex-col">
-                    <DialogTitle>Feedback</DialogTitle>
-                    <MarkdownRenderer>{i.feedback}</MarkdownRenderer>
-                  </DialogContent>
-                </Dialog>
-              )
-            }
-          />
-        </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Suspense
           fallback={<Loader2Icon className="animate-spin size-24 mx-auto" />}
         >

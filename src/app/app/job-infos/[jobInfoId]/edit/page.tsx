@@ -20,20 +20,25 @@ export default async function JobInfoNewPage({
   const { jobInfoId } = await params
 
   return (
-    <div className="container my-4 max-w-5xl space-y-4">
-      <JobInfoBackLink jobInfoId={jobInfoId} />
+    <div className="relative min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative w-full max-w-screen-xl mx-auto px-6 lg:px-12 py-8 space-y-4">
+        <JobInfoBackLink jobInfoId={jobInfoId} />
 
-      <h1 className="text-3xl md:text-4xl">Edit Job Description</h1>
+        <h1 className="text-3xl md:text-4xl font-semibold">
+          Edit Job Description
+        </h1>
 
-      <Card>
-        <CardContent>
-          <Suspense
-            fallback={<Loader2 className="size-24 animate-spin mx-auto" />}
-          >
-            <SuspendedForm jobInfoId={jobInfoId} />
-          </Suspense>
-        </CardContent>
-      </Card>
+        <Card className="border-white/10 bg-white/5 shadow-2xl">
+          <CardContent className="p-6 sm:p-8">
+            <Suspense
+              fallback={<Loader2 className="size-24 animate-spin mx-auto" />}
+            >
+              <SuspendedForm jobInfoId={jobInfoId} />
+            </Suspense>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

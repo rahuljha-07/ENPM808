@@ -1,56 +1,59 @@
-import { Button } from "@/components/ui/button"
+﻿import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PricingTable } from "@/services/clerk/components/PricingTable"
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser"
+import { UserAvatar } from "@/features/users/components/UserAvatar"
 import { SignInButton } from "@clerk/nextjs"
 import {
+  ArrowRight,
   BookOpenCheckIcon,
-  Brain,
   BrainCircuitIcon,
+  Compass,
   FileSlidersIcon,
-  FileText,
-  Search,
+  Layers,
+  Rocket,
+  Sparkles,
   SpeechIcon,
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import { Suspense } from "react"
-import { UserAvatar } from "@/features/users/components/UserAvatar"
-import { PricingTable } from "@/services/clerk/components/PricingTable"
 
 export default function LandingPage() {
   return (
-    <div className="bg-gradient-to-b from-background to-muted/20">
-      <Navbar />
-      <Hero />
-      <Features />
-      <DetailedFeatures />
-      <Stats />
-      <Testimonials />
-      <Pricing />
-      <Footer />
+    <div className="min-h-screen bg-slate-950 text-slate-50">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(94,234,212,0.12),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.12),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative">
+        <Navbar />
+        <Hero />
+        <ProductGrid />
+        <Workflow />
+        <CustomerProof />
+        <Pricing />
+        <Footer />
+      </div>
     </div>
   )
 }
 
 function Navbar() {
   return (
-    <nav className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="container">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center gap-2">
-            <BrainCircuitIcon className="size-8 text-primary" />
-            <h1 className="text-2xl font-bold text-foreground">Landr</h1>
+    <nav className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-lg">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="rounded-full bg-emerald-500/10 p-2 ring-1 ring-emerald-500/30">
+            <BrainCircuitIcon className="h-6 w-6 text-emerald-400" />
           </div>
-          <Suspense
-            fallback={
-              <SignInButton forceRedirectUrl="/app">
-                <Button variant="outline">Sign In</Button>
-              </SignInButton>
-            }
-          >
-            <NavButton />
-          </Suspense>
-        </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">
+                Excel Interview
+              </p>
+              <p className="text-lg font-semibold text-white">Interview Lab</p>
+            </div>
+          </div>
+
+        <Suspense fallback={<Button variant="outline">Sign In</Button>}>
+          <NavButton />
+        </Suspense>
       </div>
     </nav>
   )
@@ -59,7 +62,7 @@ function Navbar() {
 async function NavButton() {
   const { userId } = await getCurrentUser()
 
-  if (userId == null) {
+  if (!userId) {
     return (
       <SignInButton forceRedirectUrl="/app">
         <Button variant="outline">Sign In</Button>
@@ -69,537 +72,361 @@ async function NavButton() {
 
   return (
     <Button asChild>
-      <Link href="/app">Dashboard</Link>
+      <Link href="/app">Go to workspace</Link>
     </Button>
   )
 }
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden py-20 sm:py-32">
-      <div className="container">
-        <div className="text-center">
-          <h2 className="text-4xl sm:text-6xl font-bold text-foreground mb-6 leading-tight">
-            Land your dream job with{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent text-nowrap">
-              AI-powered
-            </span>{" "}
-            job preparation
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Skip the guesswork and accelerate your job search. Our AI platform
-            eliminates interview anxiety, optimizes your resume, and gives you
-            the technical edge to land offers faster.
-          </p>
-          <Button size="lg" className="h-12 px-6 text-base" asChild>
-            <Link href="/app">Get Started for Free</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Features() {
-  const features = [
-    {
-      title: "AI Interview Practice",
-      Icon: SpeechIcon,
-      description:
-        "Simulate real interviews with AI that adapts to your responses. Build confidence and eliminate nervousness before the big day.",
-    },
-    {
-      title: "Tailored Resume Suggestions",
-      Icon: FileSlidersIcon,
-      description:
-        "Transform your resume into an ATS-friendly, recruiter-approved document that gets you more callbacks.",
-    },
-    {
-      title: "Technical Question Practice",
-      Icon: BookOpenCheckIcon,
-      description:
-        "Solve coding problems with guided hints and explanations. Perfect your approach to technical interviews.",
-    },
-  ]
-  return (
-    <section className="py-20">
-      <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map(feature => (
-            <Card
-              key={feature.title}
-              className="transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <CardHeader className="pb-4">
-                <div className="w-16 h-16 mb-4 bg-primary/10 flex items-center justify-center rounded-lg">
-                  <feature.Icon className="w-8 h-8 text-primary" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-card-foreground">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground text-lg leading-relaxed">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function DetailedFeatures() {
-  return (
-    <section className="py-20 bg-muted/20">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Everything you need to{" "}
-            <span className="text-primary">ace your interviews</span>
-          </h3>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Get hands-on experience with real interview scenarios, personalized
-            feedback, and industry-proven strategies
-          </p>
-        </div>
-
-        <div className="space-y-20">
-          {/* AI Interview Practice */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <SpeechIcon className="w-6 h-6 text-primary" />
-                </div>
-                <h4 className="text-2xl font-bold text-foreground">
-                  AI Interview Practice
-                </h4>
-              </div>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Practice with our advanced AI interviewer that adapts to your
-                responses and provides real-time feedback. Experience realistic
-                interview scenarios for behavioral, technical, and case study
-                questions.
-              </p>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Real-time voice interaction with AI interviewer
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Personalized feedback on communication style
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Industry-specific question banks
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Progress tracking and improvement metrics
-                </li>
-              </ul>
+    <section className="relative overflow-hidden py-16 sm:py-24">
+      <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-emerald-200">
+              <Sparkles className="h-4 w-4 text-emerald-300" />
+              Built for bold career moves
             </div>
-            <div className="bg-card rounded-2xl p-6 border border-border shadow-lg">
-              <div className="bg-muted/50 rounded-lg p-4 mb-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Brain className="w-4 h-4 text-primary" />
+            <h1 className="text-balance text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+              Reimagine your prep with a AI that coaches, critiques, and
+              celebrates your next offer.
+            </h1>
+            <p className="text-lg text-slate-200/80 sm:text-xl">
+              Excel Interview blends AI coaching, curated drills, and
+              actionable critique so you can tell sharper stories, ship cleaner
+              code, and negotiate with confidence.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button size="lg" className="gap-2" asChild>
+                <Link href="/app">
+                  Launch the studio <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10"
+                asChild
+              >
+                <Link href="#pricing">See plans</Link>
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-6 text-sm text-slate-200/70">
+              <BadgePill>Adaptive interview drills</BadgePill>
+              <BadgePill>Resume critiques with proof</BadgePill>
+              <BadgePill>Offer negotiation prep</BadgePill>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-emerald-500/10">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-emerald-500/10 p-2">
+                    <SpeechIcon className="h-4 w-4 text-emerald-300" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">
-                    AI Interviewer
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground italic">
-                  &quot;Tell me about a time when you had to work with a
-                  difficult team member...&quot;
-                </p>
-              </div>
-              <div className="bg-primary/5 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary">You</span>
-                  </div>
-                  <span className="text-sm font-medium text-foreground">
-                    Your Response
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  &quot;In my previous role, I worked with a colleague who
-                  consistently missed deadlines...&quot;
-                </p>
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                    Strong storytelling
-                  </span>
-                  <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                    Good structure
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Resume Optimization */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="lg:order-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <FileSlidersIcon className="w-6 h-6 text-primary" />
-                </div>
-                <h4 className="text-2xl font-bold text-foreground">
-                  Smart Resume Analysis
-                </h4>
-              </div>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Transform your resume with AI-powered suggestions that optimize
-                for ATS systems and recruiter preferences. Get specific,
-                actionable feedback tailored to your target role and industry.
-              </p>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  ATS compatibility scoring and optimization
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Job description matching analysis
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Industry-specific keyword suggestions
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Before/after impact measurement
-                </li>
-              </ul>
-            </div>
-            <div className="lg:order-1 bg-card rounded-2xl p-6 border border-border shadow-lg">
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium text-foreground">
-                    Resume Score
-                  </span>
-                  <span className="text-2xl font-bold text-primary">87%</span>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div
-                    className="bg-primary h-2 rounded-full"
-                    style={{ width: "87%" }}
-                  ></div>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <span className="text-sm text-foreground">
-                    ATS Compatibility
-                  </span>
-                  <span className="text-sm font-medium text-primary">
-                    Excellent
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <span className="text-sm text-foreground">Keyword Match</span>
-                  <span className="text-sm font-medium text-primary">92%</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <span className="text-sm text-foreground">
-                    Impact Statements
-                  </span>
-                  <span className="text-sm font-medium text-primary">Good</span>
-                </div>
-              </div>
-              <div className="mt-4 p-3 bg-primary/10 rounded-lg">
-                <p className="text-xs text-primary font-medium mb-1">
-                  💡 Suggestion
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Add 2 more quantified achievements to increase impact score
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Technical Questions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <BookOpenCheckIcon className="w-6 h-6 text-primary" />
-                </div>
-                <h4 className="text-2xl font-bold text-foreground">
-                  Technical Interview Prep
-                </h4>
-              </div>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Master coding interviews with our comprehensive practice
-                platform. Get step-by-step guidance, hints, and detailed
-                explanations for problems across all difficulty levels and
-                topics.
-              </p>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  1000+ curated coding problems
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Real-time code execution and testing
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  AI-powered hints and explanations
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  Company-specific question patterns
-                </li>
-              </ul>
-            </div>
-            <div className="bg-card rounded-2xl p-6 border border-border shadow-lg">
-              <div className="bg-muted/50 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-foreground">
-                    Two Sum
-                  </span>
-                  <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                    Easy
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Given an array of integers, return indices of two numbers that
-                  add up to target.
-                </p>
-                <div className="bg-background rounded p-2 font-mono text-xs">
-                  <span className="text-primary">def</span>{" "}
-                  <span className="text-foreground">twoSum</span>(
-                  <span className="text-primary">nums, target</span>):
-                  <br />
-                  &nbsp;&nbsp;
-                  <span className="text-muted-foreground">
-                    # Your solution here
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-xs text-muted-foreground">
-                <span className="text-primary">✓</span> 3/5 test cases passed
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Stats() {
-  const stats = [
-    {
-      value: "2.3x",
-      label: "Faster job placement",
-      description:
-        "Our users land offers in 4-6 weeks vs industry average of 12+ weeks",
-    },
-    {
-      value: "65%",
-      label: "Fewer interviews needed",
-      description:
-        "Average 3-4 interviews to land an offer vs typical 8-10 interviews",
-    },
-    {
-      value: "89%",
-      label: "Interview success rate",
-      description:
-        "Users who complete our prep program receive offers at 9/10 interviews",
-    },
-    {
-      value: "$15K+",
-      label: "Higher starting salaries",
-      description:
-        "Better negotiation skills lead to significantly higher compensation",
-    },
-  ]
-
-  return (
-    <section className="py-20 bg-muted/30">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Our users land jobs{" "}
-            <span className="text-primary">faster and better</span>
-          </h3>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. See how Landr users
-            consistently outperform the competition in every metric that
-            matters.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="text-center p-6 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50 hover:bg-card/80 transition-all duration-300"
-            >
-              <div className="text-4xl sm:text-5xl font-bold text-primary mb-2">
-                {stat.value}
-              </div>
-              <div className="text-lg font-semibold text-foreground mb-3">
-                {stat.label}
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {stat.description}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-sm text-muted-foreground mb-8 text-pretty">
-            * Based on internal data from 2,500+ successful job placements in
-            2024
-          </p>
-          <Button size="lg" className="h-12 px-6" asChild>
-            <Link href="/app">Join thousands of successful job seekers</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Testimonials() {
-  const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "Software Engineer",
-      company: "Google",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "Landr completely transformed my interview preparation. The AI practice sessions felt so realistic that I walked into my Google interview feeling completely confident. Landed the offer on my first try!",
-      timeToOffer: "3 weeks",
-    },
-    {
-      name: "Marcus Rodriguez",
-      role: "Product Manager",
-      company: "Stripe",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "I was struggling with behavioral questions until I found Landr. The AI helped me craft compelling stories and practice my delivery. Got offers from 3 different companies!",
-      timeToOffer: "5 weeks",
-    },
-    {
-      name: "Emily Park",
-      role: "Data Scientist",
-      company: "Netflix",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "The resume optimization feature was a game-changer. My callback rate tripled after implementing Landr&apos;s suggestions. Worth every penny and more.",
-      timeToOffer: "4 weeks",
-    },
-    {
-      name: "Alex Thompson",
-      role: "Frontend Developer",
-      company: "Airbnb",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "The technical question practice was incredible. I went from failing coding interviews to acing them. The AI&apos;s feedback helped me identify and fix my weak spots immediately.",
-      timeToOffer: "2 weeks",
-    },
-    {
-      name: "Priya Patel",
-      role: "UX Designer",
-      company: "Figma",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "I was career-changing into tech and felt overwhelmed. Landr&apos;s personalized guidance gave me the confidence to pursue design roles. Now I&apos;m living my dream at Figma!",
-      timeToOffer: "6 weeks",
-    },
-    {
-      name: "David Kim",
-      role: "DevOps Engineer",
-      company: "AWS",
-      avatar:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop&crop=face&auto=format&q=80",
-      content:
-        "The salary negotiation tips alone paid for the platform 10x over. I increased my offer by $25K just by following Landr&apos;s guidance. Absolutely worth it!",
-      timeToOffer: "4 weeks",
-    },
-  ]
-
-  return (
-    <section className="py-20">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">
-            Success stories from{" "}
-            <span className="text-primary">real users</span>
-          </h3>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Join thousands of professionals who&apos;ve accelerated their
-            careers with Landr
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card
-              key={index}
-              className="relative overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl h-full"
-            >
-              <CardContent className="p-6 h-full flex flex-col">
-                <div className="flex items-center gap-3 mb-4">
-                  <UserAvatar
-                    className="size-10 flex-shrink-0"
-                    user={{
-                      imageUrl: testimonial.avatar,
-                      name: testimonial.name,
-                    }}
-                  />
                   <div>
-                    <div className="font-semibold text-foreground">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {testimonial.role}
-                    </div>
+                    <p className="text-sm font-medium text-white">Live coach</p>
+                    <p className="text-xs text-slate-300/70">Behavioral</p>
                   </div>
                 </div>
+                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200">
+                  Recording notes
+                </span>
+              </div>
+              <div className="space-y-3 rounded-xl border border-white/5 bg-slate-900/70 p-3">
+                <p className="text-xs uppercase tracking-[0.15em] text-emerald-200">
+                  Coach prompt
+                </p>
+                <p className="text-sm text-slate-100/90">
+                  "Walk me through a messy launch you inherited. What signals
+                  told you it would miss, and how did you reset the plan?"
+                </p>
+              </div>
+              <div className="mt-4 space-y-3 rounded-xl border border-white/5 bg-emerald-500/5 p-3">
+                <p className="text-xs uppercase tracking-[0.15em] text-emerald-200">
+                  Your framing
+                </p>
+                <p className="text-sm text-slate-100/90">
+                  "In week one I mapped risk to owners, cut the scope to 70%,
+                  and aligned success on adoption, not features shipped."
+                </p>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <Tag>Credibility</Tag>
+                  <Tag>Prioritization</Tag>
+                  <Tag>Influence</Tag>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
-                <blockquote className="text-muted-foreground leading-relaxed mb-4 italic flex-grow-1">
-                  &quot;{testimonial.content}&quot;
-                </blockquote>
+function BadgePill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/80">
+      {children}
+    </span>
+  )
+}
 
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full bg-emerald-500/10 px-2 py-1 text-emerald-200">
+      {children}
+    </span>
+  )
+}
+
+function ProductGrid() {
+  const items = [
+    {
+      title: "Interview labs",
+      copy: "Voice and text drills that adapt to your answers, expose gaps, and replay your strongest riffs.",
+      icon: SpeechIcon,
+      accent: "from-emerald-400/70 to-teal-300/60",
+    },
+    {
+      title: "Narrative builder",
+      copy: "Craft measurable stories with proof points, outcomes, and conflict. Export to pitch, resume, or portfolio.",
+      icon: FileSlidersIcon,
+      accent: "from-cyan-400/70 to-blue-300/60",
+    },
+    {
+      title: "Technical sprints",
+      copy: "Guided challenges with live hints, code reviews, and time-boxed practice that mirrors onsite loops.",
+      icon: BookOpenCheckIcon,
+      accent: "from-purple-400/70 to-fuchsia-300/60",
+    },
+    {
+      title: "Offer room",
+      copy: "Model compensation, rehearse counter points, and track recruiter interactions in one place.",
+      icon: Layers,
+      accent: "from-amber-400/70 to-orange-300/60",
+    },
+  ]
+
+  return (
+    <section className="py-16">
+      <div className="container">
+        <div className="mb-10 max-w-3xl space-y-4">
+          <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/90">
+            Platform
+          </p>
+          <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+            Four rooms, one studio-built to keep you shipping sharper answers.
+          </h2>
+          <p className="text-lg text-slate-200/80">
+            Every module pairs AI critique with human patterns from successful
+            candidates so you know what “good” sounds like.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {items.map(item => (
+            <div
+              key={item.title}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition duration-300 hover:border-white/20 hover:bg-white/10"
+            >
+              <div
+                className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${item.accent} opacity-30 blur-3xl transition duration-300 group-hover:scale-110`}
+              />
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-full bg-white/10 p-3">
+                  <item.icon className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  {item.title}
+                </h3>
+              </div>
+              <p className="text-slate-200/80">{item.copy}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Workflow() {
+  const steps = [
+    {
+      title: "Scan",
+      detail:
+        "Drop a JD or role target. We generate a skills map and pick your first drills.",
+      icon: Compass,
+    },
+    {
+      title: "Drill",
+      detail:
+        "Rapid sessions for behavioral and technical practice with live critique and suggested rewrites.",
+      icon: Sparkles,
+    },
+    {
+      title: "Distill",
+      detail:
+        "Turn practice into portfolio bullets, interview stories, and negotiation scripts.",
+      icon: FileSlidersIcon,
+    },
+    {
+      title: "Deploy",
+      detail:
+        "Track offers, test counters, and rehearse the final conversation before you sign.",
+      icon: Rocket,
+    },
+  ]
+
+  return (
+    <section className="border-y border-white/5 bg-slate-900/40 py-16">
+      <div className="container">
+        <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/90">
+              How it flows
+            </p>
+            <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+              A simple loop that keeps you moving forward.
+            </h2>
+            <p className="max-w-2xl text-lg text-slate-200/80">
+              Each stage closes a feedback loop-so you capture what you learned
+              and arrive sharper at every interview.
+            </p>
+          </div>
+          <Button variant="outline" className="border-white/30 text-white">
+            View sample schedule
+          </Button>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, idx) => (
+            <Card
+              key={step.title}
+              className="bg-slate-950/70 border-white/10 text-white"
+            >
+              <CardHeader className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-primary">
-                    @{testimonial.company}
+                  <div className="rounded-full bg-white/10 p-2">
+                    <step.icon className="h-5 w-5 text-emerald-200" />
                   </div>
-                  <div className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
-                    Hired in {testimonial.timeToOffer}
-                  </div>
+                  <span className="text-sm text-emerald-200/80">
+                    0{idx + 1}
+                  </span>
                 </div>
+                <CardTitle className="text-xl">{step.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-slate-200/80">
+                {step.detail}
               </CardContent>
             </Card>
           ))}
         </div>
+      </div>
+    </section>
+  )
+}
 
-        <div className="text-center mt-12">
-          <p className="text-muted-foreground mb-6">
-            Ready to write your own success story?
-          </p>
-          <Button size="lg" className="h-12 px-8" asChild>
-            <Link href="/app">Start Your Journey Today</Link>
-          </Button>
+function CustomerProof() {
+  const quotes = [
+    {
+      name: "Ivy Tran",
+      role: "Staff Engineer to Director  -  Northwind Labs",
+      quote:
+        "The drills forced me to tighten my stories. I swapped in hard numbers and finally sounded like a leader, not just a builder.",
+      time: "Offer in 4 weeks",
+      image:
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+    {
+      name: "Leo Martinez",
+      role: "Product Manager  -  Waypoint",
+      quote:
+        "Excel’s rewrites gave me a reusable playbook. I stopped rambling and started landing final rounds consistently.",
+      time: "3 offers this cycle",
+      image:
+        "https://images.unsplash.com/photo-1463453091185-61582044d556?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+    {
+      name: "Selena Moore",
+      role: "Data Scientist  -  Helio",
+      quote:
+        "Technical sprints felt eerily close to the onsite. The feedback loop made me fix gaps before the real thing.",
+      time: "Comp up +18%",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+    {
+      name: "Jared Ellis",
+      role: "Mobile Lead  -  Northstar",
+      quote:
+        "Mock interviews surfaced weak framing in my architecture stories. Two sessions later, the offer came in above my target band.",
+      time: "Offer +12%",
+      image:
+        "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+    {
+      name: "Priya Rao",
+      role: "Product Designer  -  Atelier",
+      quote:
+        "Story cards helped me package messy projects into crisp narratives. I finally stopped over-explaining in loop interviews.",
+      time: "Final rounds at 3 teams",
+      image:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+    {
+      name: "Mateo Silva",
+      role: "DevOps Engineer  -  Orbit",
+      quote:
+        "The negotiation room walked me through counters and emails. First time I felt prepared to push back and still sound collaborative.",
+      time: "Comp up +20%",
+      image:
+        "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=96&h=96&fit=crop&crop=faces&auto=format&q=80",
+    },
+  ]
+
+  return (
+    <section className="py-16">
+      <div className="container">
+        <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/90">
+              Proof
+            </p>
+            <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+              Real people, sharper outcomes.
+            </h2>
+            <p className="max-w-2xl text-lg text-slate-200/80">
+              Not borrowed testimonials-fresh voices with different backgrounds and outcomes.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {quotes.map(q => (
+            <Card
+              key={q.name}
+              className="flex h-full flex-col border-white/10 bg-white/5 text-white"
+            >
+              <CardHeader className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <UserAvatar
+                    user={{ imageUrl: q.image ?? "", name: q.name }}
+                    className="size-12"
+                  />
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg">{q.name}</CardTitle>
+                    <p className="text-sm text-slate-200/80">{q.role}</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="flex flex-1 flex-col justify-between gap-4">
+                <p className="text-slate-100/80 leading-relaxed">{q.quote}</p>
+                <div className="text-sm font-medium text-emerald-200">{q.time}</div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
@@ -608,27 +435,22 @@ function Testimonials() {
 
 function Pricing() {
   return (
-    <section className="py-20 bg-muted/20">
+    <section id="pricing" className="border-t border-white/5 bg-slate-900/40 py-16">
       <div className="container">
-        <div className="text-center mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Choose your{" "}
-            <span className="text-primary">career acceleration</span> plan
-          </h3>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Invest in your future with flexible pricing options designed to fit
-            your career goals and budget
+        <div className="mb-10 space-y-3 text-center">
+          <p className="text-sm uppercase tracking-[0.18em] text-emerald-200/90">
+            Pricing
+          </p>
+          <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+            Choose how you want to work.
+          </h2>
+          <p className="text-lg text-slate-200/80">
+            Transparent plans with all core modules included.
           </p>
         </div>
 
         <div className="max-w-5xl mx-auto">
           <PricingTable />
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-sm text-muted-foreground mb-4">
-            All plans include a 7-day refund period. Cancel anytime.
-          </p>
         </div>
       </div>
     </section>
@@ -637,15 +459,43 @@ function Pricing() {
 
 function Footer() {
   return (
-    <footer className="py-6 bg-card border-t border-border">
-      <div className="container">
-        <div className="text-center">
-          <p className="text-muted-foreground">
-            Empowering your career journey with AI-powered job preparation
-            tools.
-          </p>
+    <footer className="border-t border-white/5 bg-slate-950 py-8">
+      <div className="container flex flex-col gap-3 text-sm text-slate-300/80 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2 text-white/90">
+          <BrainCircuitIcon className="h-5 w-5 text-emerald-300" />
+          <span>Excel Interview  -  Interview Lab</span>
+        </div>
+        <div className="flex gap-4">
+          <Link href="/app" className="hover:text-white">
+            Launch workspace
+          </Link>
+          <Link href="#pricing" className="hover:text-white">
+            Plans
+          </Link>
         </div>
       </div>
     </footer>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

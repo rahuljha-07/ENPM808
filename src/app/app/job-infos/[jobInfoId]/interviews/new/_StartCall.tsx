@@ -69,33 +69,71 @@ export function StartCall({
 
   if (readyState === VoiceReadyState.IDLE) {
     return (
-      <div className="flex justify-center items-center h-screen-header">
-        <Button
-          size="lg"
-          onClick={async () => {
-            const res = await createInterview({ jobInfoId: jobInfo.id })
-            if (res.error) {
-              return errorToast(res.message)
-            }
-            setInterviewId(res.id)
+      <div className="relative min-h-screen bg-slate-950 text-white">
+        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+        <div className="relative container h-screen-header flex items-center justify-center">
+          <div className="max-w-3xl w-full rounded-3xl border border-white/10 bg-white/5 px-8 py-10 shadow-2xl backdrop-blur-xl space-y-6">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200/80">
+                Live interview
+              </p>
+              <h1 className="text-3xl font-semibold leading-tight">
+                Start your mock interview with Excel Interview
+              </h1>
+              <p className="text-slate-200/80">
+                We will use your role, experience level, and job description to
+                tailor the conversation and feedback in real time.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 text-sm text-slate-200/80">
+              <InfoPill label="Role" value={jobInfo.title || "Not specified"} />
+              <InfoPill
+                label="Experience"
+                value={jobInfo.experienceLevel ?? "Unknown"}
+              />
+              <InfoPill
+                label="Focus"
+                value="Behavioral + technical + project deep dives"
+              />
+              <InfoPill label="Runtime" value="You control the pace" />
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-slate-200/80">
+              <p className="font-semibold text-white mb-2">Your description</p>
+              <p className="leading-relaxed">
+                {jobInfo.description ?? "No description provided."}
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <Button
+                size="lg"
+                className="px-8 text-base font-semibold"
+                onClick={async () => {
+                  const res = await createInterview({ jobInfoId: jobInfo.id })
+                  if (res.error) {
+                    return errorToast(res.message)
+                  }
+                  setInterviewId(res.id)
 
-            connect({
-              auth: { type: "accessToken", value: accessToken },
-              configId: env.NEXT_PUBLIC_HUME_CONFIG_ID,
-              sessionSettings: {
-                type: "session_settings",
-                variables: {
-                  userName: user.name,
-                  title: jobInfo.title || "Not Specified",
-                  description: jobInfo.description,
-                  experienceLevel: jobInfo.experienceLevel,
-                },
-              },
-            })
-          }}
-        >
-          Start Interview
-        </Button>
+                  connect({
+                    auth: { type: "accessToken", value: accessToken },
+                    configId: env.NEXT_PUBLIC_HUME_CONFIG_ID,
+                    sessionSettings: {
+                      type: "session_settings",
+                      variables: {
+                        userName: user.name,
+                        title: jobInfo.title || "Not Specified",
+                        description: jobInfo.description,
+                        experienceLevel: jobInfo.experienceLevel,
+                      },
+                    },
+                  })
+                }}
+              >
+                Start Interview
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -105,17 +143,25 @@ export function StartCall({
     readyState === VoiceReadyState.CLOSED
   ) {
     return (
-      <div className="h-screen-header flex items-center justify-center">
-        <Loader2Icon className="animate-spin size-24" />
+      <div className="relative min-h-screen bg-slate-950 text-white">
+        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+        <div className="relative h-screen-header flex items-center justify-center">
+          <Loader2Icon className="animate-spin size-24 text-emerald-200" />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="overflow-y-auto h-screen-header flex flex-col-reverse">
-      <div className="container py-6 flex flex-col items-center justify-end gap-4">
-        <Messages user={user} />
-        <Controls />
+    <div className="relative min-h-screen bg-slate-950 text-white">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(94,234,212,0.14),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(14,165,233,0.14),transparent_30%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div className="relative overflow-y-auto h-screen-header flex flex-col-reverse">
+        <div className="container py-6 flex flex-col items-center justify-end gap-6">
+          <div className="w-full max-w-5xl rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl p-4 sm:p-6">
+            <Messages user={user} />
+          </div>
+          <Controls />
+        </div>
       </div>
     </div>
   )
@@ -133,7 +179,7 @@ function Messages({ user }: { user: { name: string; imageUrl: string } }) {
       messages={condensedMessages}
       user={user}
       maxFft={Math.max(...fft)}
-      className="max-w-5xl"
+      className="w-full"
     />
   )
 }
@@ -143,11 +189,11 @@ function Controls() {
     useVoice()
 
   return (
-    <div className="flex gap-5 rounded border px-5 py-2 w-fit sticky bottom-6 bg-background items-center">
+    <div className="flex gap-5 rounded-2xl border border-white/10 px-5 py-3 w-fit sticky bottom-6 bg-white/10 backdrop-blur-xl shadow-lg items-center text-white">
       <Button
         variant="ghost"
         size="icon"
-        className="-mx-3"
+        className="-mx-3 text-white hover:bg-white/10"
         onClick={() => (isMuted ? unmute() : mute())}
       >
         {isMuted ? <MicOffIcon className="text-destructive" /> : <MicIcon />}
@@ -156,13 +202,13 @@ function Controls() {
       <div className="self-stretch">
         <FftVisualizer fft={micFft} />
       </div>
-      <div className="text-sm text-muted-foreground tabular-nums">
+      <div className="text-sm text-slate-200/80 tabular-nums">
         {callDurationTimestamp}
       </div>
       <Button
         variant="ghost"
         size="icon"
-        className="-mx-3"
+        className="-mx-3 text-white hover:bg-white/10"
         onClick={disconnect}
       >
         <PhoneOffIcon className="text-destructive" />
@@ -180,11 +226,22 @@ function FftVisualizer({ fft }: { fft: number[] }) {
         return (
           <div
             key={index}
-            className="min-h-0.5 bg-primary/75 w-0.5 rounded"
+            className="min-h-0.5 bg-emerald-300/80 w-0.5 rounded"
             style={{ height: `${percent < 10 ? 0 : percent}%` }}
           />
         )
       })}
+    </div>
+  )
+}
+
+function InfoPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+      <p className="text-xs uppercase tracking-[0.12em] text-emerald-200/80">
+        {label}
+      </p>
+      <p className="text-base text-white">{value}</p>
     </div>
   )
 }
