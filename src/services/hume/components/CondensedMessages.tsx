@@ -1,6 +1,6 @@
 import { UserAvatar } from "@/features/users/components/UserAvatar"
 import { cn } from "@/lib/utils"
-import { BrainCircuitIcon } from "lucide-react"
+import { Target } from "lucide-react"
 
 export function CondensedMessages({
   messages,
@@ -50,7 +50,7 @@ export function CondensedMessages({
                     )}
                   />
                   <div className="relative flex items-center justify-center size-10 rounded-full bg-gradient-to-br from-sky-500/30 to-emerald-500/30 border border-white/20">
-                    <BrainCircuitIcon
+                    <Target
                       className="size-6 text-white"
                       style={shouldAnimate ? { scale: maxFft / 8 + 1 } : undefined}
                     />

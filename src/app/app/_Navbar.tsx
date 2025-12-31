@@ -2,10 +2,10 @@
 
 import {
   BookOpenIcon,
-  BrainCircuitIcon,
   FileSlidersIcon,
   LogOut,
   SpeechIcon,
+  Target,
   User,
 } from "lucide-react"
 import {
@@ -36,7 +36,7 @@ export function Navbar({ user }: { user: { name: string; imageUrl: string } }) {
       <div className="container flex h-full items-center justify-between">
         <Link href="/app" className="flex items-center gap-3 text-white">
           <div className="rounded-full bg-emerald-500/10 p-2 ring-1 ring-emerald-500/30">
-            <BrainCircuitIcon className="size-6 text-emerald-300" />
+            <Target className="size-6 text-emerald-300" />
           </div>
           <span className="text-lg font-semibold tracking-tight">
             Excel Interview

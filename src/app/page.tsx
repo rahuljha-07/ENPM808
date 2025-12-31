@@ -7,7 +7,7 @@ import { SignInButton } from "@clerk/nextjs"
 import {
   ArrowRight,
   BookOpenCheckIcon,
-  BrainCircuitIcon,
+  Target,
   Compass,
   FileSlidersIcon,
   Layers,
@@ -41,7 +41,7 @@ function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="rounded-full bg-emerald-500/10 p-2 ring-1 ring-emerald-500/30">
-            <BrainCircuitIcon className="h-6 w-6 text-emerald-400" />
+            <Target className="h-6 w-6 text-emerald-400" />
           </div>
             <div>
               <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">
@@ -462,7 +462,7 @@ function Footer() {
     <footer className="border-t border-white/5 bg-slate-950 py-8">
       <div className="container flex flex-col gap-3 text-sm text-slate-300/80 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2 text-white/90">
-          <BrainCircuitIcon className="h-5 w-5 text-emerald-300" />
+          <Target className="h-5 w-5 text-emerald-300" />
           <span>Excel Interview  -  Interview Lab</span>
         </div>
         <div className="flex gap-4">
