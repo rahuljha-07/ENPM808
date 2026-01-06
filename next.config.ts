@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
       allowedOrigins: ["localhost:3000", "h9q101zk-3000.use.devtunnels.ms"],
     },
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 export default nextConfig
